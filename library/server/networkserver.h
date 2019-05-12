@@ -12,7 +12,13 @@ public:
     NetworkServer(const NetworkServer&) = delete;
     NetworkServer& operator=(const NetworkServer&) = delete;
 
-    NetworkServerBase &interface() { return *server; }
+    void open();
+    void close();
+    std::unique_ptr<NetworkSessionBase> accept();
+
+    operator bool() const { return server->is_opened(); }
+    bool is_opened() const { return server->is_opened(); }
+
 protected:
     std::unique_ptr<NetworkServerBase> server;
     Protocol protocol;

@@ -13,7 +13,7 @@ public:
     void open() override;
     void close() override;
 
-    int accept() override;
+    std::unique_ptr<NetworkSessionBase> accept() override;
 
 protected:
     std::unique_ptr<boost::asio::io_context> io_context;

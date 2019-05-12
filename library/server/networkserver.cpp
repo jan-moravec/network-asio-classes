@@ -1,23 +1,10 @@
 #include "networkserver.h"
 #include "networkservertcp.h"
 #include "networkserverudp.h"
+#include "networkservericmp.h"
 
 #include "networksessionbase.h"
 #include <iostream>
-
-void run(NetworkSessionBase &session)
-{
-    while (true) {
-        uint8_t data[1024];
-        int length = session.read_some_wait(data, 1024);
-
-        if (length >= 0) {
-            session.write(data, length);
-        } else {
-            break;
-        }
-    }
-}
 
 NetworkServer::NetworkServer(const std::string &port, Protocol protocol): protocol(protocol)
 {
@@ -29,12 +16,22 @@ NetworkServer::NetworkServer(const std::string &port, Protocol protocol): protoc
         server = std::make_unique<NetworkServerUdp>(port);
         break;
     case icmp:
-        //client = std::make_unique<NetworkClientIcmp>(host, port);
+        server = std::make_unique<NetworkServerIcmp>(port);
         break;
     }
+}
 
-    //server->open();
-    //if (*server) {
-    //    server->accept();
-    //}
+void NetworkServer::open()
+{
+    server->open();
+}
+
+void NetworkServer::close()
+{
+    server->close();
+}
+
+std::unique_ptr<NetworkSessionBase> NetworkServer::accept()
+{
+    return server->accept();
 }

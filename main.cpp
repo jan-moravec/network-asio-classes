@@ -1,17 +1,20 @@
 #include <iostream>
 #include <mutex>
-#include "library/client/networkclienttcp.h"
-#include "library/client/networkclientudp.h"
+#include <thread>
 #include "library/client/networkclient.h"
 #include "library/server/networkserver.h"
+#include "library/test/testsessionecho.h"
+#include "library/test/testclientecho.h"
+#include "library/test/testsessiondatetime.h"
+#include "library/test/testclientdatetime.h"
 
 static std::mutex mutex;
 
 void thread_function(int n)
 {
-    //std::cout << __PRETTY_FUNCTION__ << " " << n << std::endl;
-    NetworkClient client("127.0.0.1", "1234", NetworkClient::udp);
-    std::lock_guard<std::mutex> lck(mutex);
+    /*//std::cout << __PRETTY_FUNCTION__ << " " << n << std::endl;
+    NetworkClient client("127.0.0.1", "1234", NetworkClient::tcp);
+    //std::lock_guard<std::mutex> lck(mutex);
     client.interface().connect();
     if (client.interface()) {
         std::string message = "Ahoj serviku!\n";
@@ -25,22 +28,29 @@ void thread_function(int n)
         //std::cout << client.interface().available() << std::endl;
         //std::cout << client.interface().available() << std::endl;
         client.interface().disconnect();
-    }
+    }*/
+
+    TestClientDateTime client("127.0.0.1", "1234", NetworkClient::tcp);
+    client.run();
 }
 
 int main()
 {
     bool run = true;
-    NetworkServer server("1234", NetworkServer::udp);
+    NetworkServer server("1234", NetworkServer::tcp);
     std::thread server_thread([&]{
-        server.interface().open();
+        server.open();
         while (run) {
-            server.interface().accept();
+            std::unique_ptr<NetworkSessionBase> session_interface = server.accept();
+            std::shared_ptr<TestSessionDateTime> session( new TestSessionDateTime(std::move(session_interface)) );
+            std::thread([=]{
+                session->run();
+            }).detach();
         }
     });
 
     std::vector<std::thread> threads;
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 1; ++i) {
         std::thread thread(thread_function, i);
         threads.push_back(std::move(thread));
         //std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -55,7 +65,7 @@ int main()
     }
 
     run = false;
-    server.interface().close();
+    server.close();
 
     server_thread.join();
 

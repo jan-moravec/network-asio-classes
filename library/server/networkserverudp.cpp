@@ -27,11 +27,10 @@ void NetworkServerUdp::close()
     opened = false;
 }
 
-int NetworkServerUdp::accept()
+std::unique_ptr<NetworkSessionBase> NetworkServerUdp::accept()
 {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
     std::unique_ptr<NetworkSessionBase> session_interface = std::make_unique<NetworkSessionUdp>(socket, counter++);
-    handle_session(std::move(session_interface));
-    return 0;
+    return session_interface;
 }
 

@@ -19,6 +19,10 @@ SOURCES += \
         library/server/networksessionicmp.cpp \
         library/server/networksessiontcp.cpp \
         library/server/networksessionudp.cpp \
+        library/test/testclientdatetime.cpp \
+        library/test/testclientecho.cpp \
+        library/test/testsessiondatetime.cpp \
+        library/test/testsessionecho.cpp \
         main.cpp
 
 win32 {
@@ -44,4 +48,8 @@ HEADERS += \
     library/server/networksessionbase.h \
     library/server/networksessionicmp.h \
     library/server/networksessiontcp.h \
-    library/server/networksessionudp.h
+    library/server/networksessionudp.h \
+    library/test/testclientdatetime.h \
+    library/test/testclientecho.h \
+    library/test/testsessiondatetime.h \
+    library/test/testsessionecho.h

@@ -26,17 +26,16 @@ void NetworkServerTcp::close()
     opened = false;
 }
 
-int NetworkServerTcp::accept()
+std::unique_ptr<NetworkSessionBase> NetworkServerTcp::accept()
 {
     boost::system::error_code ec;
     boost::asio::ip::tcp::socket socket = acceptor->accept(ec);
     if (ec) {
         std::cout << __PRETTY_FUNCTION__ << ": " << ec.message() << std::endl;
-        return -1;
+        return nullptr;
     }
 
     std::unique_ptr<NetworkSessionBase> session_interface = std::make_unique<NetworkSessionTcp>(std::move(socket), counter++);
-    std::thread(&NetworkServerTcp::handle_session, this, std::move(session_interface)).detach();
-    return 0;
+    return session_interface;
 }
 

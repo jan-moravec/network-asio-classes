@@ -12,10 +12,10 @@ public:
     NetworkClient(const NetworkClient&) = delete;
     NetworkClient& operator=(const NetworkClient&) = delete;
 
-    NetworkClientBase &interface() { return *client; }
+    NetworkClientBase &interface() { return *io; }
 
 protected:
-    std::unique_ptr<NetworkClientBase> client;
+    std::unique_ptr<NetworkClientBase> io;
     Protocol protocol;
 };
 

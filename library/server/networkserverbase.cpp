@@ -9,8 +9,8 @@ NetworkServerBase::~NetworkServerBase()
 {
 }
 
-void NetworkServerBase::handle_session(std::unique_ptr<NetworkSessionBase> session_interface)
+/*void NetworkServerBase::handle_session(std::unique_ptr<NetworkSessionBase> session_interface)
 {
     NetworkSession session(std::move(session_interface));
     session.run();
-}
+}*/

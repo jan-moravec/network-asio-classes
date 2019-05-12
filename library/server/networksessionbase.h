@@ -15,7 +15,7 @@ public:
     virtual int write(const uint8_t *buffer, std::size_t size) = 0; /// Send size
     int write(const std::string &buffer);
 
-    virtual int wait() = 0; /// Wait until some data arrived, 0 = data ready, 1 = timed out, -1 = error
+    virtual int wait() = 0; /// Wait until some data arrived, 0 = data ready, -1 = error
     virtual int available() = 0;
     virtual int read_some(uint8_t *buffer, std::size_t size) = 0; /// Recieve 0 up to size
     virtual int read_some_wait(uint8_t *buffer, std::size_t size) = 0; /// Wait for data and recieve 1 up to size
