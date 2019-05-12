@@ -10,6 +10,8 @@ class NetworkServerBase
 {
 public:
     NetworkServerBase(const std::string &port);
+    NetworkServerBase(const NetworkServerBase&) = delete;
+    NetworkServerBase& operator=(const NetworkServerBase&) = delete;
     virtual ~NetworkServerBase();
 
     virtual void open() = 0;

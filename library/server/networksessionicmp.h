@@ -9,9 +9,7 @@
 class NetworkSessionIcmp: public NetworkSessionBase
 {
 public:
-    NetworkSessionIcmp(boost::asio::ip::icmp::socket socket, unsigned id);
-
-    void run() override;
+    NetworkSessionIcmp(std::shared_ptr<boost::asio::ip::icmp::socket> socket, unsigned id);
 
     int write(const uint8_t *buffer, std::size_t size) override;
     using NetworkSessionBase::write;
@@ -24,7 +22,8 @@ public:
     int read_until(std::string &buffer, const std::string &delim) override;
 
 protected:
-    boost::asio::ip::icmp::socket socket;
+    std::shared_ptr<boost::asio::ip::icmp::socket> socket;
+    boost::asio::ip::icmp::endpoint sender_endpoint;
     bool check_error(const boost::system::error_code &ec, const char *function_name);
 };
 

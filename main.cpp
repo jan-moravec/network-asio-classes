@@ -47,13 +47,15 @@ int main()
     }
 
 
-    std::cin.get();
-    run = false;
-    server.interface().close();
+    //std::cin.get();
+
 
     for (std::thread &thread: threads) {
         thread.join();
     }
+
+    run = false;
+    server.interface().close();
 
     server_thread.join();
 

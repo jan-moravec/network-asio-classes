@@ -11,8 +11,6 @@ class NetworkSessionTcp: public NetworkSessionBase
 public:
     NetworkSessionTcp(boost::asio::ip::tcp::socket socket, unsigned id);
 
-    void run() override;
-
     int write(const uint8_t *buffer, std::size_t size) override;
     using NetworkSessionBase::write;
 

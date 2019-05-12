@@ -8,6 +8,8 @@ class NetworkSession
 {
 public:
     NetworkSession(std::unique_ptr<NetworkSessionBase> session);
+    NetworkSession(const NetworkSession&) = delete;
+    NetworkSession& operator=(const NetworkSession&) = delete;
     virtual ~NetworkSession();
 
     virtual void run();

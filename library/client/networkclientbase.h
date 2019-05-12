@@ -9,6 +9,8 @@ class NetworkClientBase
 {
 public:
     NetworkClientBase(const std::string &host, const std::string &port);
+    NetworkClientBase(const NetworkClientBase&) = delete;
+    NetworkClientBase& operator=(const NetworkClientBase&) = delete;
     virtual ~NetworkClientBase();
 
     virtual void connect() = 0;

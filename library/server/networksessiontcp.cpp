@@ -5,21 +5,6 @@ NetworkSessionTcp::NetworkSessionTcp(boost::asio::ip::tcp::socket socket, unsign
 {
 }
 
-void NetworkSessionTcp::run()
-{
-    std::cout << __PRETTY_FUNCTION__ << ": " << id << " - " << socket.remote_endpoint().address().to_string() << " - " << socket.remote_endpoint().port() << std::endl;
-    while (true) {
-        uint8_t data[1024];
-        int length = read_some_wait(data, 1024);
-
-        if (length >= 0) {
-            write(data, length);
-        } else {
-            break;
-        }
-    }
-}
-
 int NetworkSessionTcp::write(const uint8_t *buffer, std::size_t size)
 {
     boost::system::error_code ec;

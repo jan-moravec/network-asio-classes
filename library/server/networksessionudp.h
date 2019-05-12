@@ -12,8 +12,6 @@ class NetworkSessionUdp: public NetworkSessionBase
 public:
     NetworkSessionUdp(std::shared_ptr<boost::asio::ip::udp::socket> socket, unsigned id);
 
-    void run() override;
-
     int write(const uint8_t *buffer, std::size_t size) override;
     using NetworkSessionBase::write;
 

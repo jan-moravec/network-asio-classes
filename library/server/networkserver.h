@@ -9,6 +9,8 @@ class NetworkServer
 public:
     enum Protocol { tcp, udp, icmp };
     NetworkServer(const std::string &port, Protocol protocol);
+    NetworkServer(const NetworkServer&) = delete;
+    NetworkServer& operator=(const NetworkServer&) = delete;
 
     NetworkServerBase &interface() { return *server; }
 protected:

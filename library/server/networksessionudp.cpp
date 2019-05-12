@@ -5,21 +5,6 @@ NetworkSessionUdp::NetworkSessionUdp(std::shared_ptr<boost::asio::ip::udp::socke
 {
 }
 
-void NetworkSessionUdp::run()
-{
-    std::cout << __PRETTY_FUNCTION__ << ": " << id << " - " << socket->remote_endpoint().address().to_string() << " - " << socket->remote_endpoint().port() << std::endl;
-    while (true) {
-        uint8_t data[1024];
-        int length = read_some_wait(data, 1024);
-
-        if (length >= 0) {
-            write(data, length);
-        } else {
-            break;
-        }
-    }
-}
-
 int NetworkSessionUdp::write(const uint8_t *buffer, std::size_t size)
 {
     boost::system::error_code ec;
@@ -70,7 +55,7 @@ int NetworkSessionUdp::read_some(uint8_t *buffer, std::size_t size)
             available = size;
         }
 
-        std::size_t length = socket->receive(boost::asio::buffer(buffer, available), 0, ec);
+        std::size_t length = socket->receive_from(boost::asio::buffer(buffer, available), sender_endpoint, 0, ec);
         if (check_error(ec, __PRETTY_FUNCTION__)) {
             return -1;
         }
@@ -99,7 +84,7 @@ int NetworkSessionUdp::read_exactly(uint8_t *buffer, std::size_t size)
     std::size_t n = 0;
 
     do {
-        n += socket->receive(boost::asio::buffer(&buffer[n], size-n), 0, ec);
+        n += socket->receive_from(boost::asio::buffer(&buffer[n], size-n), sender_endpoint, 0, ec);
 
         if (check_error(ec, __PRETTY_FUNCTION__)) {
             return -1;
@@ -121,7 +106,7 @@ int NetworkSessionUdp::read_until(std::string &buffer, const std::string &delim)
     buffer.resize(65536);
 
     do {
-        socket->receive(boost::asio::buffer(&buffer[n], max_size-n), 0, ec);
+        socket->receive_from(boost::asio::buffer(&buffer[n], max_size-n), sender_endpoint, 0, ec);
 
         found = buffer.find(delim, n_last);
         n_last = n;

@@ -8,9 +8,9 @@ class NetworkSessionBase
 {
 public:
     NetworkSessionBase(unsigned id);
+    NetworkSessionBase(const NetworkSessionBase&) = delete;
+    NetworkSessionBase& operator=(const NetworkSessionBase&) = delete;
     virtual ~NetworkSessionBase();
-
-    virtual void run() = 0;
 
     virtual int write(const uint8_t *buffer, std::size_t size) = 0; /// Send size
     int write(const std::string &buffer);
