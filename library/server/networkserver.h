@@ -19,9 +19,13 @@ public:
     operator bool() const { return server->is_opened(); }
     bool is_opened() const { return server->is_opened(); }
 
+    void set_debug(bool debug) { this->debug = debug;  }
+    bool get_debug() const { return debug;  }
+
 protected:
     std::unique_ptr<NetworkServerBase> server;
     Protocol protocol;
+    bool debug = false;
 };
 
 #endif // NETWORKSERVER_H

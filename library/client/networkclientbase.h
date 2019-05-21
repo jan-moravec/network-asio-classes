@@ -29,10 +29,17 @@ public:
     operator bool() const { return connected; }
     bool is_connected() const { return connected; }
 
+    std::string get_host() const { return host; }
+    std::string get_port() const { return port; }
+
+    void set_debug(bool debug) { this->debug = debug;  }
+    bool get_debug() const { return debug;  }
+
 protected:
     bool connected = false;
     std::string host;
     std::string port;
+    bool debug = false;
 };
 
 #endif // NETWORKCLIENTBASE_H

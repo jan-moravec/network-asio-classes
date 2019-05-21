@@ -102,6 +102,18 @@ int NetworkSessionTcp::read_until(std::string &buffer, const std::string &delim)
     return n;
 }
 
+std::string NetworkSessionTcp::get_client_ip()
+{
+    boost::system::error_code ec;
+    std::string address = socket.remote_endpoint().address().to_string(ec);
+    if (ec) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << ec.message() << std::endl;
+        return {};
+    }
+
+    return address;
+}
+
 bool NetworkSessionTcp::check_error(const boost::system::error_code &ec, const char *function_name)
 {
     if (ec) {

@@ -7,6 +7,10 @@ NetworkClientIcmp::NetworkClientIcmp(const std::string &host, const std::string 
 
 void NetworkClientIcmp::connect()
 {
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << host << " - " << port << std::endl;
+    }
+
     io_context = std::make_shared<boost::asio::io_context>();
     resolver = std::make_unique<boost::asio::ip::icmp::resolver>(*io_context);
     socket = std::make_unique<boost::asio::ip::icmp::socket>(*io_context);
@@ -16,7 +20,7 @@ void NetworkClientIcmp::connect()
 
     if (ec) {
         connected = false;
-        std::cout << __PRETTY_FUNCTION__ << ": " << ec.message() << std::endl;
+        std::cout << __PRETTY_FUNCTION__ << ": " << host << " - " << port << " - " << ec.message() << std::endl;
     } else {
         connected = true;
     }
@@ -24,6 +28,10 @@ void NetworkClientIcmp::connect()
 
 void NetworkClientIcmp::disconnect()
 {
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << host << " - " << port << std::endl;
+    }
+
     boost::system::error_code ec;
     socket->shutdown(boost::asio::ip::icmp::socket::shutdown_both, ec);
     socket->close(ec);

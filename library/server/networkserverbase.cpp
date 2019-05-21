@@ -4,13 +4,14 @@
 
 NetworkServerBase::NetworkServerBase(const std::string &port): port(port)
 {
-}
-NetworkServerBase::~NetworkServerBase()
-{
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
+    }
 }
 
-/*void NetworkServerBase::handle_session(std::unique_ptr<NetworkSessionBase> session_interface)
+NetworkServerBase::~NetworkServerBase()
 {
-    NetworkSession session(std::move(session_interface));
-    session.run();
-}*/
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
+    }
+}

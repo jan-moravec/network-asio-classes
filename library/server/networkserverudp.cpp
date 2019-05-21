@@ -9,7 +9,9 @@ NetworkServerUdp::NetworkServerUdp(const std::string &port): NetworkServerBase(p
 
 void NetworkServerUdp::open()
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
+    }
     io_context = std::make_unique<boost::asio::io_context>();
     socket = std::make_shared<boost::asio::ip::udp::socket>(*io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), std::stoi(port)));
     if (socket->is_open()) {
@@ -21,6 +23,9 @@ void NetworkServerUdp::open()
 
 void NetworkServerUdp::close()
 {
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
+    }
     boost::system::error_code ec;
     socket->close(ec);
     io_context->stop();
@@ -29,7 +34,9 @@ void NetworkServerUdp::close()
 
 std::unique_ptr<NetworkSessionBase> NetworkServerUdp::accept()
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
+    }
     std::unique_ptr<NetworkSessionBase> session_interface = std::make_unique<NetworkSessionUdp>(socket, counter++);
     return session_interface;
 }

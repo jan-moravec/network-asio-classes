@@ -14,9 +14,13 @@ public:
 
     NetworkClientBase &interface() { return *io; }
 
+    void set_debug(bool debug) { this->debug = debug;  }
+    bool get_debug() const { return debug;  }
+
 protected:
     std::unique_ptr<NetworkClientBase> io;
     Protocol protocol;
+    bool debug = false;
 };
 
 #endif // NETWORKCLIENT_H

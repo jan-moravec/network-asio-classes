@@ -3,8 +3,6 @@
 #include "networkclientudp.h"
 #include "networkclienticmp.h"
 
-#include <iostream>
-
 NetworkClient::NetworkClient(const std::string &host, const std::string &port, Protocol protocol): protocol(protocol)
 {
     switch (protocol) {

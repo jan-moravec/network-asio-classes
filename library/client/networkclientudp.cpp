@@ -7,6 +7,10 @@ NetworkClientUdp::NetworkClientUdp(const std::string &host, const std::string &p
 
 void NetworkClientUdp::connect()
 {
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << host << " - " << port << std::endl;
+    }
+
     io_context = std::make_shared<boost::asio::io_context>();
     resolver = std::make_unique<boost::asio::ip::udp::resolver>(*io_context);
     socket = std::make_unique<boost::asio::ip::udp::socket>(*io_context);
@@ -16,7 +20,7 @@ void NetworkClientUdp::connect()
 
     if (ec) {
         connected = false;
-        std::cout << __PRETTY_FUNCTION__ << ": " << ec.message() << std::endl;
+        std::cout << __PRETTY_FUNCTION__ << ": " << host << " - " << port << " - " << ec.message() << std::endl;
     } else {
         connected = true;
     }
@@ -24,6 +28,10 @@ void NetworkClientUdp::connect()
 
 void NetworkClientUdp::disconnect()
 {
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << host << " - " << port << std::endl;
+    }
+
     boost::system::error_code ec;
     socket->shutdown(boost::asio::ip::udp::socket::shutdown_both, ec);
     socket->close(ec);

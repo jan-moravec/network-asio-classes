@@ -1,5 +1,5 @@
 #include "networkservericmp.h"
-#include "networksessiontcp.h"
+#include "networksessionicmp.h"
 #include <iostream>
 #include <thread>
 
@@ -9,9 +9,13 @@ NetworkServerIcmp::NetworkServerIcmp(const std::string &port): NetworkServerBase
 
 void NetworkServerIcmp::open()
 {
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
+    }
+
     io_context = std::make_unique<boost::asio::io_context>();
-    acceptor = std::make_unique<boost::asio::ip::tcp::acceptor>(*io_context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::stoi(port)));
-    if (acceptor->is_open()) {
+    socket = std::make_shared<boost::asio::ip::icmp::socket>(*io_context, boost::asio::ip::icmp::endpoint(boost::asio::ip::icmp::v4(), std::stoi(port)));
+    if (socket->is_open()) {
         opened = true;
     } else {
         opened = false;
@@ -20,22 +24,23 @@ void NetworkServerIcmp::open()
 
 void NetworkServerIcmp::close()
 {
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
+    }
+
     boost::system::error_code ec;
-    acceptor->close(ec);
+    socket->close(ec);
     io_context->stop();
     opened = false;
 }
 
 std::unique_ptr<NetworkSessionBase> NetworkServerIcmp::accept()
 {
-    boost::system::error_code ec;
-    boost::asio::ip::tcp::socket socket = acceptor->accept(ec);
-    if (ec) {
-        std::cout << __PRETTY_FUNCTION__ << ": " << ec.message() << std::endl;
-        return nullptr;
+    if (debug) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << port << std::endl;
     }
 
-    std::unique_ptr<NetworkSessionBase> session_interface = std::make_unique<NetworkSessionTcp>(std::move(socket), counter++);
+    std::unique_ptr<NetworkSessionBase> session_interface = std::make_unique<NetworkSessionIcmp>(socket, counter++);
     return session_interface;
 }
 

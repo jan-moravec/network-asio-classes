@@ -120,6 +120,18 @@ int NetworkSessionIcmp::read_until(std::string &buffer, const std::string &delim
     return n;
 }
 
+std::string NetworkSessionIcmp::get_client_ip()
+{
+    boost::system::error_code ec;
+    std::string address = sender_endpoint.address().to_string(ec);
+    if (ec) {
+        std::cout << __PRETTY_FUNCTION__ << ": " << ec.message() << std::endl;
+        return {};
+    }
+
+    return address;
+}
+
 bool NetworkSessionIcmp::check_error(const boost::system::error_code &ec, const char *function_name)
 {
     if (ec) {

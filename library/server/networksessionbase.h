@@ -22,9 +22,16 @@ public:
     virtual int read_exactly(uint8_t *buffer, std::size_t size) = 0; /// Wait until size recieved, or less if timeout expired
     virtual int read_until(std::string &buffer, const std::string &delim) = 0; /// Wait until buffer ending with delim recieved
 
+    virtual std::string get_client_ip() = 0;
+
+    unsigned get_id() const { return id; }
+    void set_debug(bool debug) { this->debug = debug;  }
+    bool get_debug() const { return debug;  }
+
 protected:
     bool opened = true;
     unsigned id;
+    bool debug = false;
 };
 
 #endif // NETWORKSESSIONBASE_H

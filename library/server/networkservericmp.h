@@ -17,7 +17,7 @@ public:
 
 protected:
     std::unique_ptr<boost::asio::io_context> io_context;
-    std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor;
+    std::shared_ptr<boost::asio::ip::icmp::socket> socket;
 };
 
 #endif // NETWORKSERVERICMP_H

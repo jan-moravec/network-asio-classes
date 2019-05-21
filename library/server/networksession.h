@@ -14,13 +14,18 @@ public:
     NetworkSession(const NetworkSession&) = delete;
     NetworkSession& operator=(const NetworkSession&) = delete;
     virtual ~NetworkSession();
+
     enum Protocol { unspecified, tcp, udp, icmp };
 
     virtual void run() = 0;
 
+    void set_debug(bool debug) { this->debug = debug;  }
+    bool get_debug() const { return debug;  }
+
 protected:
     Protocol protocol = unspecified;
     std::unique_ptr<NetworkSessionBase> io;
+    bool debug = false;
 
     NetworkSessionTcp *io_tcp = nullptr;
     NetworkSessionUdp *io_udp = nullptr;
